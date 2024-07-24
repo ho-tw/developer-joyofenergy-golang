@@ -35,6 +35,11 @@ type PricePlanComparisons struct {
 	PricePlanComparisons map[string]float64 `json:"pricePlanComparisons"`
 }
 
+type LastWeekUsage struct {
+	SmartMeterId string  `json:"smartMeterId"`
+	Cost         float64 `json:"cost"`
+}
+
 const (
 	Sunday = iota
 	Monday

@@ -38,6 +38,7 @@ func addRoutes(r *httprouter.Router) {
 
 	r.POST("/readings/store", readingsHandler.StoreReadings)
 	r.GET("/readings/read/:smartMeterId", readingsHandler.GetReadings)
+	r.GET("/readings/last-week/:smartMeterId", readingsHandler.GetLastWeekUsage)
 
 	r.GET("/price-plans/compare-all/:smartMeterId", pricePlanHandler.CompareAll)
 	r.GET("/price-plans/recommend/:smartMeterId", pricePlanHandler.Recommend)

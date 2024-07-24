@@ -3,10 +3,11 @@ package readings
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/julienschmidt/httprouter"
 	"io"
 	"joi-energy-golang/api"
 	"net/http"
+
+	"github.com/julienschmidt/httprouter"
 
 	"joi-energy-golang/domain"
 )
@@ -50,6 +51,25 @@ func (h *Handler) GetReadings(w http.ResponseWriter, r *http.Request, urlParams 
 	result := domain.StoreReadings{
 		SmartMeterId:        smartMeterId,
 		ElectricityReadings: readings,
+	}
+	api.SuccessJson(w, r, result)
+}
+
+func (h *Handler) GetLastWeekUsage(w http.ResponseWriter, r *http.Request, urlParams httprouter.Params) {
+	smartMeterId := urlParams.ByName("smartMeterId")
+	err := validateSmartMeterId(smartMeterId)
+	if err != nil {
+		api.Error(w, r, err, http.StatusBadRequest)
+		return
+	}
+	cost, err := h.service.CalculateLastWeekUsageCost(smartMeterId, 1)
+	if err != nil {
+		api.Error(w, r, err, http.StatusInternalServerError)
+		return
+	}
+	result := domain.LastWeekUsage{
+		SmartMeterId: smartMeterId,
+		Cost:         cost,
 	}
 	api.SuccessJson(w, r, result)
 }
